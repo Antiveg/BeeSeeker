@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
+import Navbar from '../components/Navbar'
 
 const Dashboard = () => {
 
@@ -10,24 +11,9 @@ const Dashboard = () => {
     <div className='min-h-screen'>
         
         {/* Navbar for Recruiter Panel */}
-        <div className='shadow py-4'>
-            <div className='px-5 flex justify-between items-center'>
-                <img onClick={()=>navigate('/')} src={assets.logo} alt="Logo" className="cursor-pointer h-10 w-auto" />     
-                <div className='flex items-center gap-3'>
-                    <p className='max-sm:hidden'>Welcome, Seeker!</p>
-                    <div className='relative group'>
-                        <img className='w-8 border rounded-full' src={assets.company_icon} alt="" />
-                        <div className='absolute hidden group-hover:block top0 right-0 z-10 text-black rounded pt-12'>
-                            <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
-                                <li className='py-1 px-2 cursor-pointer pr-10' >Logout</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Navbar/>
 
-        <div className='flex items-start'>
+        <div className='flex items-start pt-20'>
             {/* Left sidebar with option to add scholarship, manage scholarship, and view applications */}
             <div className='inline-block min-h-screen border-r-2'>
                 <ul className='flex flex-col items-start pt-5 text-gray-800'>

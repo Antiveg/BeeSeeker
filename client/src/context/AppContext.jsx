@@ -1,48 +1,60 @@
 import { createContext, useEffect, useState } from "react";  
 import { jobsData } from "../assets/assets";  
+import axios from 'axios'
 
 export const AppContext = createContext();  
 
 export const AppContextProvider = ({ children }) => {  
+
     const [searchFilter, setSearchFilter] = useState({  
         title: '',  
         location: ''  
-    });  
+    })
+    const [isSearched, setIsSearched] = useState(false)
+    const [isLoading, setLoading] = useState(true)  
+    const [showLogin, setShowLogin] = useState(false)
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+    const [scholarships, setScholarship] = useState([])
+    const [refresh, setRefresh] = useState(false)
 
-    const [isSearched, setIsSearched] = useState(false);  
-    const [jobs, setJobs] = useState([]);  
-    const [isLoading, setIsLoading] = useState(true);  
+    useEffect(() => {
+        const getScholarships = async () => {
+            try {
+                setLoading(true)
+                const response = await axios.get('http://localhost:5000/scholarships')
+                setScholarship(response.data.scholarships)
+            }catch(error) {
+                console.log('Error fetching scholarship data', error);
+            }finally {
+                setLoading(false)
+            }
+        }
+        getScholarships()
+    }, [])
 
-    const [showRecruiterLogin, setShowRecruiterLogin] = useState(false)
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user))
+        } else {
+            localStorage.removeItem('user');
+        }
+    }, [user]);
 
-
-    // function to fetch
-    const fetchJobs = () => {  
-        try {  
-            setIsLoading(true);  
-            setJobs(jobsData);  
-        } catch (error) {  
-            console.error("Error fetching jobs:", error);  
-            setJobs([]);  
-        } finally {  
-            setIsLoading(false);  
-        }  
+    const value = {   
+        searchFilter, setSearchFilter,
+        isSearched, setIsSearched,  
+        // jobs, setJobs,  
+        isLoading, setLoading,
+        showLogin, setShowLogin,
+        user, setUser,
+        scholarships, setScholarship,
+        refresh, setRefresh
     };  
 
-    useEffect(() => {  
-        fetchJobs();  
-    }, []);  
-
-    const value = {  
-        setSearchFilter,  
-        searchFilter,  
-        isSearched,  
-        setIsSearched,  
-        jobs,  
-        setJobs,  
-        isLoading,
-        showRecruiterLogin, setShowRecruiterLogin,
-    };  
+    console.log(scholarships)
 
     return (  
         <AppContext.Provider value={value}>  

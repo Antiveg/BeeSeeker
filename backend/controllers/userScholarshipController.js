@@ -1,4 +1,4 @@
-const { UserScholarships, User, Scholarship } = require('../models')
+const { UserScholarships, User, Scholarship, Provider, Organization, Location } = require('../models')
 const formatDate = require('./utility')
 
 const getUserScholarships = async (req, res, next) => {
@@ -38,18 +38,47 @@ const getUserScholarships = async (req, res, next) => {
 
 const getUserScholarshipByUserId = async (req, res, next) => {
     try {
-        const uid = +req.params.uid
+        const uid = (req.params.uid !== undefined) ? +req.params.uid : req.user.id
         const userScholarships = await UserScholarships.findAll({
             attributes: {
                 exclude: ['createdAt','updatedAt']
             },
+            include: [
+                {
+                    model: Scholarship,
+                    attributes: ['title','deadline'],
+                    include: [
+                        {
+                            model: Provider,
+                            attributes: ['id'],
+                            include: [
+                                {
+                                    model: Organization,
+                                    attributes: ['logo','name']
+                                }
+                            ]
+                        },
+                        {
+                            model: Location,
+                            attributes: ['name']
+                        }
+                    ]
+                },
+            ],
             where: {
                 userid: uid
             }
         })
+
+        const userScholarshipsJSON = userScholarships.map((scholarship) => {
+            const scholarshipJSON = scholarship.toJSON()
+            scholarshipJSON.Scholarship.deadline = formatDate(scholarshipJSON.Scholarship.deadline)
+            return scholarshipJSON
+        })
+
         res.status(200).json({
             message: "successfully fetch all scholarship applied by a user",
-            userScholarships: userScholarships
+            userScholarships: userScholarshipsJSON
         })
     }catch(error){
         next(error)

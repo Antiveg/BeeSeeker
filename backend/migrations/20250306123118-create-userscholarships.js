@@ -25,10 +25,6 @@ module.exports = {
         },
         allowNull: false,
       },
-      resume: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       isaccepted: {
         type: Sequelize.BOOLEAN,
         allowNull: true,

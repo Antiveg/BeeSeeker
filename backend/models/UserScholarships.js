@@ -26,10 +26,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             references: { model: 'Scholarship', key: 'id' },
         },
-        resume: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         isaccepted: {
             type: DataTypes.BOOLEAN,
             allowNull: true,

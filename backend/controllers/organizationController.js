@@ -6,15 +6,20 @@ const getOrganizations = async (req, res, next) => {
             attributes: {
                 exclude: ['updatedAt', 'createdAt']
             }
-        })
+        });
+
+        const updatedOrganizations = organizations.map((organization) => ({
+            ...organization.toJSON(),
+            logo: organization.logo ? encodeURI(`http://localhost:5000/uploads/${organization.logo}`) : null
+        }));
 
         res.status(200).json({
-            message: "successfully fetch all organizations",
-            organizations: organizations
-        })
-    }catch(error){
-        next(error)
+            message: "Successfully fetched all organizations",
+            organizations: updatedOrganizations
+        });
+    } catch (error) {
+        next(error);
     }
-}
+};
 
 module.exports = { getOrganizations }

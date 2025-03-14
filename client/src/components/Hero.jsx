@@ -1,13 +1,32 @@
-import React, { useContext, useRef } from 'react';  
+import React, { useContext, useEffect, useRef, useState } from 'react';  
 import { assets } from '../assets/assets';  
 import { AppContext } from '../context/AppContext';  
+import axios from 'axios'
 
 const Hero = () => {  
   const {setSearchFilter, setIsSearched} = useContext(AppContext)  
 
   const titleRef = useRef(null)  
   const locationRef = useRef(null)  
-  const jobListingSectionRef = useRef(null)  
+  const jobListingSectionRef = useRef(null)
+
+  const [organizations, setOrganizations] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const getOrganizationLogos = async () => {
+      try {
+        setLoading(true)
+        const response = await axios.get('http://localhost:5000/organizations')
+        setOrganizations(response.data.organizations)
+      }catch(error) {
+        console.log('Error in fetching organizations info...', error)
+      }finally {
+        setLoading(false)
+      }
+    }
+    getOrganizationLogos()
+  }, [])
 
   const onSearch = () => {  
     setSearchFilter({  
@@ -29,7 +48,7 @@ const Hero = () => {
 
   return (  
     <>  
-      <div className='relative min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 pb-16'>  
+      <div className='relative min-h-screen flex flex-col justify-center px-4 pt-10 sm:px-6 lg:px-8 pb-16'>  
         {/* Background Gradient */}  
         <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 opacity-90 z-0'></div>  
         
@@ -57,8 +76,8 @@ const Hero = () => {
                   placeholder='Search for scholarships'  
                   className='text-white placeholder-blue-200 bg-transparent outline-none w-full text-sm md:text-lg'  
                   ref={titleRef}  
-                />  
-              </div>  
+                />
+              </div>
               
               <div className='flex items-center flex-grow m-1 md:m-2 bg-white/10 rounded-lg px-2 md:px-4 py-2 md:py-3 w-full'>  
                 <img className='h-4 md:h-6 mr-2 md:mr-3 opacity-70' src={assets.location_icon} alt="Location Icon" />  
@@ -86,18 +105,11 @@ const Hero = () => {
             <div className='bg-white backdrop-blur-lg rounded-xl p-4 md:p-6 max-w-4xl mx-auto shadow-lg'>  
               <div className='flex justify-center items-center gap-4 md:gap-8 flex-wrap'>  
                 <p className='font-medium text-gray-800 text-sm md:text-base'>Supported by</p>  
-                {[  
-                  assets.microsoft_logo,   
-                  assets.walmart_logo,   
-                  assets.accenture_logo,   
-                  assets.samsung_logo,   
-                  assets.amazon_logo,   
-                  assets.adobe_logo  
-                ].map((logo, index) => (  
+                {organizations.map((organization, index) => (  
                   <img   
                     key={index}   
                     className='h-4 md:h-8 hover:scale-110 transition-all duration-300'   
-                    src={logo}   
+                    src={organization.logo}   
                     alt="Supporter Logo"   
                   />  
                 ))}  

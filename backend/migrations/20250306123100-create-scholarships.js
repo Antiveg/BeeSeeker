@@ -53,24 +53,20 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      eligibilitycriteria: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      benefit: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      addoninfo: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
+      // eligibilitycriteria: {
+      //   type: Sequelize.TEXT,
+      //   allowNull: true,
+      // },
+      // benefit: {
+      //   type: Sequelize.TEXT,
+      //   allowNull: true,
+      // },
+      // addoninfo: {
+      //   type: Sequelize.TEXT,
+      //   allowNull: true,
+      // },
       deadline: {
         type: Sequelize.DATE,
-        allowNull: false,
-      },
-      location: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
