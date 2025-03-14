@@ -13,13 +13,17 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      age: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      gender: {
+      // age: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      // },
+      // gender: {
+      //   type: Sequelize.STRING,
+      //   allowNull: false,
+      // },
+      resume: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING,
@@ -34,10 +38,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      profileimg: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
+      // profileimg: {
+      //   type: Sequelize.STRING,
+      //   allowNull: true,
+      // },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

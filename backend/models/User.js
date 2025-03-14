@@ -21,14 +21,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        age: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        gender: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+        // age: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // gender: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        // },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -42,10 +42,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        profileimg: {
+        resume: {
             type: DataTypes.STRING,
             allowNull: true,
-        }
+        },
     }, {
         sequelize,
         modelName: 'User'

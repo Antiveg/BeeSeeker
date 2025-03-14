@@ -6,7 +6,7 @@ const Footer = () => {
 
   const navigate = useNavigate()
 
-  return (  
+  return (
     <div className='container px-4 2xl:px-20 mx-auto flex items-center justify-between gap-4 py-3 mt-20'>   
       <div className='flex items-center gap-4'>  
        <img onClick={()=>navigate('/')} src={assets.logo} alt="Logo" className="cursor-pointer mb-3 h-10 relative w-auto" /> 
@@ -18,7 +18,7 @@ const Footer = () => {
         <img width={38} src={assets.facebook_icon} alt="Facebook" />  
         <img width={38} src={assets.instagram_icon} alt="Instagram" />  
         <img width={38} src={assets.twitter_icon} alt="Twitter" />  
-      </div>  
+      </div>
     </div>  
   )  
 }  

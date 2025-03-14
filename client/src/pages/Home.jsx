@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import JobListing from '../components/JobListing'
+import JobListing from '../components/ScholarshipListing'
 import Footer from '../components/Footer'
 
 const Home = () => {

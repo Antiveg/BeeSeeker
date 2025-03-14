@@ -49,24 +49,20 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        eligibilitycriteria: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
-        benefit: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
-        addoninfo: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
+        // eligibilitycriteria: {
+        //     type: DataTypes.TEXT,
+        //     allowNull: true
+        // },
+        // benefit: {
+        //     type: DataTypes.TEXT,
+        //     allowNull: true
+        // },
+        // addoninfo: {
+        //     type: DataTypes.TEXT,
+        //     allowNull: true
+        // },
         deadline: {
             type: DataTypes.DATE,
-            allowNull: false,
-        },
-        location: {
-            type: DataTypes.STRING,
             allowNull: false,
         },
         // createdAt sudah dibuat otomatis oleh sequelize

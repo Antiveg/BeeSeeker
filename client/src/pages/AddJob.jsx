@@ -1,19 +1,52 @@
-import React, { useEffect, useRef, useState } from 'react'  
+import React, { useEffect, useRef, useState, useContext } from 'react'  
 import Quill from 'quill';  
 import { JobCategories, JobLocations } from '../assets/assets';  
-
+import { AppContext } from "../context/AppContext";  
+import axios from 'axios'
 
 const AddJob = () => {  
-    const [title, setTitle] = useState('');  
-    const [location, setLocation] = useState('Bangalore')  
-    const [category, setCategory] = useState('Programming')  
-    const [level, setLevel] = useState('Beginner Level');  
-    const [salary, setSalary] = useState(0);  
-
-   
 
     const editorRef = useRef(null)  
-    const quillRef = useRef(null)  
+    const quillRef = useRef(null)
+    
+    const [Majors, setMajors] = useState([])
+    const [Educations, setEducations] = useState([])
+    const [Locations, setLocations] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    const [formData, setFormData] = useState({
+        funding: 0,
+        title: '',
+        description: '',
+        major: '',
+        education: '',
+        location: '',
+    })
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            setLoading(true)
+            const response = await axios.post('http://localhost:5000/create/scholarship', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+        }catch(error) {
+            console.log("Error creating new scholarship...")
+        }finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(()=>{  
         // initiate quill once  
@@ -21,18 +54,54 @@ const AddJob = () => {
             quillRef.current = new Quill(editorRef.current, {  
                 theme: 'snow',  
             })  
+            quillRef.current.on("text-change", () => {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    description: quillRef.current.root.innerHTML,
+                    // description: quillRef.current.getText(),
+                }));
+            });
         }  
     }, [])  
 
+    useEffect(() => {
+        const getMajors = async () => {
+            try {
+                setLoading(true)
+                const MajorsRequest = axios.get('http://localhost:5000/majors')
+                const EducationsRequest = axios.get('http://localhost:5000/educations')
+                const LocationsRequest = axios.get('http://localhost:5000/locations')
+
+                const responses = await Promise.all([MajorsRequest, EducationsRequest, LocationsRequest])
+                setMajors(responses[0].data.majors)
+                setEducations(responses[1].data.educations)
+                setLocations(responses[2].data.locations)
+
+                setFormData((prev) => ({
+                    ...prev,
+                    major: Majors.length ? Majors[0].id : '',
+                    education: Educations.length ? Educations[0].id : '',
+                    location: Locations.length ? Locations[0].id : ''
+                }));
+            }catch(error) {
+                console.log('Error fetching scholarship filters', error);
+            }finally {
+                setLoading(false)
+            }
+        }
+        getMajors()
+    }, [])
+
   return (  
-    <form className='container p-4 flex flex-col w-full items-start gap-3'>  
+    <form className='container p-4 flex flex-col w-full items-start gap-3' onSubmit={handleSubmit}>  
         <div className='w-full'>  
             <p className='mb-2'>Title</p>  
             <input   
                 type="text"   
-                placeholder='Type here'  
-                onChange={e=>setTitle(e.target.value)}   
-                value={title}  
+                name="title"
+                placeholder='Scholarship title'  
+                onChange={handleChange}   
+                value={formData.title}  
                 required  
                 className='w-full max-w-lg px-3 py-2 border-2 border-gray-300 rounded'
             />  
@@ -45,78 +114,67 @@ const AddJob = () => {
 
         <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8'>  
             <div>  
-                <p className='mb-2'>Category</p>  
-                <select  
-                    className='w-full px-3 py-2 border-2 border-gray-300 rounded' 
-                    onChange={e => setCategory(e.target.value)}  
-                    value={category}  
-                >  
-                    {JobCategories.map((category, index) => (  
-                        <option key={index} value={category}>  
-                            {category}  
-                        </option>  
-                    ))}  
-                </select>  
+                <p className='mb-2'>Major</p>  
+                <select 
+                    className='w-full px-3 py-2 border-2 border-gray-300 rounded'   
+                    name="major"
+                    onChange={handleChange}  
+                    value={formData.major}  
+                    required>
+                    <option value="">Select a Major</option> {/* Default Placeholder */}
+                    {Majors.map((maj, index) => (
+                        <option key={index} value={maj?.id}>{maj?.name}</option> 
+                    ))}
+                </select> 
             </div>  
 
             <div>  
                 <p className='mb-2'>Location</p>  
-                <select   
-                    className='w-full px-3 py-2 border-2 border-gray-300 rounded' 
-                    onChange={e => setLocation(e.target.value)}  
-                    value={location}  
-                >  
-                    {JobLocations.map((location, index) => (  
-                        <option key={index} value={location}>  
-                            {location}  
-                        </option>  
-                    ))}  
-                </select>  
+                <select 
+                    className='w-full px-3 py-2 border-2 border-gray-300 rounded'   
+                    name="location"
+                    onChange={handleChange}  
+                    value={formData.location}  
+                    required>
+                    <option value="">Select a location</option> 
+                    {Locations.map((maj, index) => (
+                        <option key={index} value={maj?.id}>{maj?.name}</option> 
+                    ))}
+                </select> 
             </div> 
 
             <div>  
-                <p className='mb-2'>Level</p>  
+                <p className='mb-2'>Education</p>  
                 <select 
                     className='w-full px-3 py-2 border-2 border-gray-300 rounded'   
-                    onChange={e => setLevel(e.target.value)}  
-                    value={level}  
-                >  
-                    <option value="Beginner level">Beginner Level (&lt;= SMA)</option>  
-                    <option value="Intermediate level">Intermediate Level (D1-D3)</option>  
-                    <option value="Advanced level">Advanced Level (&gt;= S1)</option>  
-                    
-                </select>  
+                    name="education"
+                    onChange={handleChange}  
+                    value={formData.education}  
+                    required>
+                    <option value="">Select a education</option> 
+                    {Educations.map((maj, index) => (
+                        <option key={index} value={maj?.id}>{maj?.name}</option> 
+                    ))}
+                </select> 
             </div> 
 
 
         </div>  
 
         <div>  
-            <p className='mb-2'>Scholarship Amount (IDR)</p>  
+            <p className='mb-2'>Scholarship Funding (IDR)</p>  
             <div className="flex items-center">  
                 <input   
-                    type="number"   
-                    min={0}  
+                    type="number" 
+                    name="funding" 
+                    min={0}
                     className='w-full px-3 py-2 border-2 border-gray-300 rounded sm:w-[200px]'   
-                    value={salary}  
-                    onChange={(e) => setSalary(e.target.value)}  
-                />  
-                <div className="flex flex-col ml-2">  
-                    <button   
-                        onClick={() => setSalary(prev => Math.max(0, (Number(prev) || 0) + 250000))}  
-                        className="border p-1 text-xs h-4 w-4 flex items-center justify-center"  
-                    >  
-                        ▲  
-                    </button>  
-                    <button   
-                        onClick={() => setSalary(prev => Math.max(0, (Number(prev) || 0) - 250000))}  
-                        className="border p-1 text-xs h-4 w-4 flex items-center justify-center"  
-                    >  
-                        ▼  
-                    </button>  
-                </div>  
+                    value={formData.funding || 0}
+                    onChange={handleChange}  
+                />
             </div>  
         </div>  
+
         <button className='w-28 py-3 mt-4 bg-black text-white'>ADD</button>
     </form>  
   )  

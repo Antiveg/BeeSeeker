@@ -3,9 +3,9 @@ import {Route, Routes} from 'react-router-dom'
 import Home from './pages/Home'
 import ApplyJob from './pages/ApplyJob'
 import Applications from './pages/Applications'
-import RecruiterLogin from './components/RecruiterLogin'
+import Login from './components/LoginRegister'
 import { AppContext } from './context/AppContext'
-import Dashboard from './pages/dashboard'
+import Dashboard from './pages/Dashboard'
 import ManageJobs from './pages/ManageJobs'
 import AddJob from './pages/AddJob'
 import ViewApplication from './pages/ViewApplication'
@@ -13,14 +13,14 @@ import 'quill/dist/quill.snow.css'
 
 const App = () => {
 
-  const {showRecruiterLogin} = useContext(AppContext)
+  const {showLogin} = useContext(AppContext)
 
   return (
     <div>
-      {showRecruiterLogin && <RecruiterLogin />}
+      {showLogin && <Login />}
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/apply-job/:id' element={<ApplyJob />} />
+        <Route path='/scholarship/:id' element={<ApplyJob />} />
         <Route path='/applications' element={<Applications />} />
         <Route path='/dashboard' element={<Dashboard />}>
           <Route path='add-job' element={<AddJob />} />

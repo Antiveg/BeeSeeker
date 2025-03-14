@@ -80,6 +80,8 @@ const getAuthenticatedUser = async (req, res, next) => {
     try {
         const { id } = req.user
 
+        console.log(req.user)
+
         if(!id){
             res.status(401).json({
                 message: 'user are not authenticated'

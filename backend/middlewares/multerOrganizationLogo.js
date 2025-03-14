@@ -11,10 +11,23 @@ const storage = multer.diskStorage({
         cb(null, uploadFolder)
     },
     filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${file.originalname}`
+        const uniqueName = `${req.body.organization_name} Logo${path.extname(file.originalname)}`
         cb(null, uniqueName)
     },
 })
-const uploadOrganizationLogo = multer({ storage }).array('photos[]')
+const upload = multer({ storage }).single('organization_logo')
+
+const uploadOrganizationLogo = (req, res, next) => {
+    if (req.body.role === 'User') {
+        return next();
+    }
+
+    upload(req, res, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'File upload failed' });
+        }
+        next();
+    });
+}
 
 module.exports = uploadOrganizationLogo;
