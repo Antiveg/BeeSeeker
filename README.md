@@ -1,6 +1,6 @@
 # BeeSeeker
 
-**BeeSeeker** is a scholarship registration platform designed to streamline the application process for students. This project provides an intuitive user interface for applicants and a robust backend for managing scholarship data and authentication.
+**BeeSeeker** is a scholarship registration platform that simplifies the application process for students. It features an easy-to-use interface for applicants while offering a strong backend for managing scholarship information and user authentication. This website allows students to search for scholarships, and it also enables organizations, including government entities, to post their scholarship offerings and descriptions for users to discover.
 
 ---
 
