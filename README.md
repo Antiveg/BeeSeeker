@@ -97,46 +97,48 @@ DB_NAME=bee_seeker_db
 JWT_SECRET=your_jwt_secret
 ```
 
-###Step 5: Database Setup
+### Step 5: Database Setup
 Create your PostgreSQL database:
 ```bash
-sql
-Copy
 CREATE DATABASE bee_seeker_db;
 ```
 If using Sequelize migrations, run:
 ```bash
-bash
-Copy
 npx sequelize-cli db:migrate
 ```
 Refer to ERD.jpg for database schema details.
+
 ---
-🚦 Running Application
-##Frontend
+
+## 🚦 Running Application
+
+### Frontend
 Start the frontend development server:
 
 ```bash
 cd client
 npm run dev
 ```
-Backend
+
+### Backend
 Start the backend server:
 
 ```bash
 cd backend
 npm run start
 ```
+
 Visit http://localhost:3000 to view the application.
 
-🌐 Deploying for Production
-Frontend Build
+---
+
+## 🌐 Deploying for Production
+
+### Frontend Build
 ```bash
 cd client
 npm run build
 ```
----
-Backend Deployment
+
+### Backend Deployment
 Deploy the backend as per your hosting strategy, ensuring that all environment variables are properly configured.
-
-
