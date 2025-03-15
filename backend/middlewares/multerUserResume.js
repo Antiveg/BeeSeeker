@@ -13,20 +13,20 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const { id, name } = req.user
-        const filename = `${id}-${name}-resume-${path.extname(file.originalname)}`
+        const filename = `${id}-${name}-resume${path.extname(file.originalname)}`
         cb(null, filename)
     }
 })
 
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /pdf|docx/;
+    const allowedTypes = /pdf/
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase())
-    const mimetype = allowedTypes.test(file.mimetype)
+    const mimetype = file.mimetype === "application/pdf"
 
-    if(extname && mimetype){
+    if (extname && mimetype) {
         return cb(null, true)
-    }else{
-        cb(new Error('Only PDF and DOCX files are allowed'), false)
+    } else {
+        cb(new Error("Only PDF files are allowed"), false)
     }
 }
 

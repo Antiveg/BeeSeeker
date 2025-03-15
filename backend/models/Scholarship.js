@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.Major, { foreignKey: 'majorid' })
             this.belongsTo(models.Education, { foreignKey: 'educationid' })
             this.belongsTo(models.Location, { foreignKey: 'locationid' })
+            this.hasMany(models.UserScholarships, { foreignKey: 'scholarshipid' })
         }
     }
     
@@ -64,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
         deadline: {
             type: DataTypes.DATE,
             allowNull: false,
+        },
+        isvisible: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
         },
         // createdAt sudah dibuat otomatis oleh sequelize
     }, {

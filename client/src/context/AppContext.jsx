@@ -33,7 +33,7 @@ export const AppContextProvider = ({ children }) => {
             }
         }
         getScholarships()
-    }, [])
+    }, [refresh])
 
     useEffect(() => {
         if (user) {
@@ -54,7 +54,7 @@ export const AppContextProvider = ({ children }) => {
         refresh, setRefresh
     };  
 
-    console.log(scholarships)
+    // console.log(scholarships)
 
     return (  
         <AppContext.Provider value={value}>  
@@ -62,3 +62,4 @@ export const AppContextProvider = ({ children }) => {
         </AppContext.Provider>  
     );  
 };  
+

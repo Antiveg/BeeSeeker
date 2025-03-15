@@ -5,10 +5,25 @@ import { AppContext } from '../context/AppContext'
 const ManageJobs = () => {
 
   const [loading, setLoading] = useState(false)
-  const { scholarships, user } = useContext(AppContext)
-  const [isChecked, setIsChecked] = useState(true)
+  const { scholarships, user, setRefresh, refresh } = useContext(AppContext)
 
-  const recruiterScholarships = scholarships.filter(scholarship => scholarship.Provider.userid === user.id);
+  const recruiterScholarships = scholarships.filter(scholarship => scholarship.Provider.userid === user.id)
+
+  const handleChange = async (sid, isvisible) => {
+    try {
+      setLoading(true)
+      const response = await axios.put(`http://localhost:5000/update/scholarship/${sid}`, {
+        isvisible: isvisible
+      }, {
+        withCredentials: true,
+      })
+      setRefresh(!refresh)
+    }catch(error){
+      console.log('Error updating scholarship visibility')
+    }finally{
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -23,6 +38,7 @@ const ManageJobs = () => {
           </tr>
         </thead>
         <tbody>
+          {recruiterScholarships <= 0 && "No scholarship made by you yet ..."}
           {recruiterScholarships.map((scholarship, index) => (
             <tr key={scholarship.id}>
               <td className='py-6 px-4 gap-2 border-b'>{index + 1}</td>
@@ -33,8 +49,8 @@ const ManageJobs = () => {
                 <input 
                     type="checkbox" 
                     className="form-checkbox h-5 w-5 text-blue-600"
-                    checked={isChecked}
-                    onClick={e => setIsChecked()}
+                    checked={scholarship.isvisible}
+                    onChange={(e) => handleChange(scholarship.id, e.target.checked)}
                 />
               </td>
 

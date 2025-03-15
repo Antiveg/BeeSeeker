@@ -44,7 +44,7 @@ const login = async (req, res, next) => {
         let organization = null;
         if (user.role === 'Provider') {
             organization = await Provider.findOne({
-                attributes: [],
+                attributes: ['id'],
                 where: { userid: user.id },
                 include: [
                     {
@@ -68,6 +68,7 @@ const login = async (req, res, next) => {
                 id: user.id,
                 name: user.name,
                 role: user.role,
+                provider_id: organization?.id,
                 organization_name: organization?.Organization?.name || null,
                 organization_id: organization?.Organization?.id || null,
                 organization_logo: encodedUrl

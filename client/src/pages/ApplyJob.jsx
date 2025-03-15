@@ -113,7 +113,8 @@ const ApplyJob = () => {
                         <h2 className='text-xl font-bold text-gray-800 mb-4'>  
                         More Scholarships
                         </h2>  
-                        <div className='space-y-4'>  
+                        <div className='space-y-4'>
+                        {scholarship.length <= 0 && "No Scholarship made yet ..."}
                         {scholarships  
                             .filter(other => other?.id !== scholarship?.id)  
                             .slice(0, 4)  

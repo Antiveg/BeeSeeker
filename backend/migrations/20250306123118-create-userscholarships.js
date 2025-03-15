@@ -30,11 +30,11 @@ module.exports = {
         allowNull: true,
         defaultValue: null,
       },
-      isvisible: {
-        type: Sequelize.BOOLEAN,
-        allowNull: true,
-        defaultValue: null,
-      },
+      // isvisible: {
+      //   type: Sequelize.BOOLEAN,
+      //   allowNull: true,
+      //   defaultValue: null,
+      // },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

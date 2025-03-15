@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             defaultValue: null,
         },
-        isvisible: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
-            defaultValue: null,
-        },
+        // isvisible: {
+        //     type: DataTypes.BOOLEAN,
+        //     allowNull: true,
+        //     defaultValue: null,
+        // },
     }, {
         sequelize,
         modelName: 'UserScholarships'

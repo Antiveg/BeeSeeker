@@ -45,32 +45,27 @@ const getUsers = async (req, res, next) => {
     }
 }
 
-const updateUserById = async (req, res, next) => {
+const updateUserResume = async (req, res, next) => {
     try {
-        const {
-            id, name, age, gender,
-            profileimg
-        } = req.body
-        const [isUpdated, updatedUser] = await User.update(
+        const id = +req.user.id
+        const relativePath = req.file.path.replace(/^.*[\\\/]?uploads[\\\/]/, '')
+        const [isUpdated, updatedUsers] = await User.update(
             {
-                name, age, gender, profileimg
+                resume: relativePath,
             },
             {
-                where: { id },
+                where: { id: id },
                 returning: true
             }
         )
 
-        if(!isUpdated){
-            res.status(200).json({
-                message: "no user got changed",
-            })
-        }else{
-            res.status(200).json({
-                message: "successfully update user",
-                user: updatedUser
-            })
-        }
+        if(!isUpdated) return res.status(200).json({ message: "no user resume got changed" })
+
+        const updated = updatedUsers[0]
+        res.status(200).json({
+            message: "successfully update user resume",
+            resume: updated?.resume ? encodeURI(`http://localhost:5000/uploads/${updated.resume}`) : null
+        })
     }catch(error){
         next(error)
     }
@@ -106,4 +101,4 @@ const getAuthenticatedUser = async (req, res, next) => {
     }
 }
 
-module.exports = { getUserById, getUsers, updateUserById, getAuthenticatedUser }
+module.exports = { getUserById, getUsers, updateUserResume, getAuthenticatedUser }

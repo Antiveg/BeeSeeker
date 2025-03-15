@@ -65,6 +65,11 @@ module.exports = {
       //   type: Sequelize.TEXT,
       //   allowNull: true,
       // },
+      isvisible: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: null,
+      },
       deadline: {
         type: Sequelize.DATE,
         allowNull: false,

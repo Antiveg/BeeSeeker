@@ -8,6 +8,7 @@ const Applications = () => {
  
   const [isEdit, setIsEdit] = useState(false)
   const [resume, setResume] = useState(null)
+  const [download, setDownload] = useState(null)
   const [loading, setLoading] = useState(false)
   const [userScholarships, setUserScholarships] = useState([])
 
@@ -19,6 +20,7 @@ const Applications = () => {
           withCredentials: true
         })
         setUserScholarships(response.data.userScholarships)
+        setDownload(response.data.resume)
       }catch(error) {
         console.log('Error in getting user scholarships', error.name)
       }finally {
@@ -27,6 +29,24 @@ const Applications = () => {
     }
     getUserScholarships()
   }, [])
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append("resume", resume)
+    try {
+      const response = await axios.put('http://localhost:5000/update/resume/user', formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
+      setDownload(response.data.resume)
+    }catch(error){
+      console.log('Error sending resume...', error)
+    }finally{
+      setIsEdit(false)
+    }
+  }
 
   return (
     <div>
@@ -38,15 +58,15 @@ const Applications = () => {
             isEdit ? <>
             <label className='flex items-center' htmlFor="resumeUpload">
               <p className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2'>Select Resume</p>
-              <input id='resumeUpload' onChange={e => setResume(e.target.files[0])} accept='application/pdf' type="file" hidden />
+              <input id='resumeUpload' onChange={e => setResume(e.target.files[0])} accept='application/pdf' type="file" hidden/>
               <img src={assets.profile_upload_icon} alt="" />
             </label>
-            <button onClick={e=>setIsEdit(false)} className='bg-green-100 border border-green-400 rounded-lg px-4 py-2'>Save</button>
+            <button onClick={e => handleUpload()} className='bg-green-100 border border-green-400 rounded-lg px-4 py-2'>Save</button>
               
             </>
             : <div className='flex gap-2'>
-              <a className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href="">
-                Resume
+              <a className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href={download}>
+                {!download ? "No Resume Yet ..." : "Download Uploaded Resume"}
               </a>
               <button onClick={()=>setIsEdit(true)} className='text-gray-500 border border-gray-300 rounded-lg px-4 py-2'>
                 Edit
@@ -66,6 +86,7 @@ const Applications = () => {
               </tr>
             </thead>
             <tbody>
+              {userScholarships.length <= 0 && "You haven't apply to any scholarship ..."}
               {userScholarships.map((scholarship) => (
                 <tr key={scholarship.id}> 
                   <td className='py-3 px-4 flex items-center gap-2 border-b'>
