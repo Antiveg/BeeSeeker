@@ -105,6 +105,7 @@ const Hero = () => {
             <div className='bg-white backdrop-blur-lg rounded-xl p-4 md:p-6 max-w-4xl mx-auto shadow-lg'>  
               <div className='flex justify-center items-center gap-4 md:gap-8 flex-wrap'>  
                 <p className='font-medium text-gray-800 text-sm md:text-base'>Supported by</p>  
+                {organizations.length <= 0 && "No company or organization yet"}
                 {organizations.map((organization, index) => (  
                   <img   
                     key={index}   

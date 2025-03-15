@@ -78,7 +78,8 @@ const JobListing = () => {
                 matchesMajor(scholarship) &&  
                 matchesEducation(scholarship) &&  
                 matchesTitle(scholarship) &&  
-                matchesSearchLocation(scholarship)  
+                matchesSearchLocation(scholarship) &&
+                scholarship.isvisible
             );  
 
         setFilteredScholarships(newFilteredScholarships);  
@@ -250,6 +251,7 @@ const JobListing = () => {
                 ) : (  
                 <>  
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">  
+                    {filteredScholarships.length <= 0 && "no scholarship met criteria or no scholarship exist yet ..."}
                     {filteredScholarships  
                         .slice((currentPage - 1) * 6, currentPage * 6)  
                         .map((scholarship, index) => (  

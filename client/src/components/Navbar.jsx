@@ -26,7 +26,7 @@ const Navbar = () => {
         }
     }
 
-    console.log(user)
+    // console.log(user)
 
     return (  
         <div className='fixed top-0 left-0 right-0 shadow py-4 h-20 bg-white z-50'>  
@@ -38,7 +38,7 @@ const Navbar = () => {
                             { user.role === "User" ?
                                 <Link to="/applications" className='text-gray-600'>My Profile & Applied Scholarships</Link> :
                                 <div className="flex flex-row items-center gap-3">
-                                    <Link to="/dashboard" className='text-gray-600'>Recruiter Dashboard</Link>
+                                    <Link to="/dashboard/manage-job" className='text-gray-600'>Recruiter Dashboard</Link>
                                     <img 
                                     src={user.organization_logo} 
                                     alt="No Image" 

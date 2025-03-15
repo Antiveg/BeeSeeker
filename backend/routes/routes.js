@@ -10,9 +10,9 @@ const { getLocations } = require('../controllers/locationController') //
 const { getMajors } = require('../controllers/majorController') //
 const { getProviders } = require('../controllers/providerController') //
 const { getOrganizations } = require('../controllers/organizationController') //
-const { getScholarships /**/ , getScholarshipById /**/, createScholarship, getOwnScholarships } = require('../controllers/scholarshipController')
-const { getUserById /**/, getUsers /**/, updateUserById, getAuthenticatedUser /**/} = require('../controllers/userController')
-const { addUserScholarship, changeUserScholarshipStatus, getUserScholarshipByScholarshipId, getUserScholarshipByUserId, getUserScholarships } = require('../controllers/userScholarshipController')
+const { getScholarships /**/ , getScholarshipById /**/, createScholarship, updateScholarship } = require('../controllers/scholarshipController')
+const { getUserById /**/, getUsers /**/, updateUserResume, getAuthenticatedUser /**/} = require('../controllers/userController')
+const { addUserScholarship, changeUserScholarshipStatus, getUserScholarshipByScholarshipId, getUserScholarshipByUserId, getUserScholarships, getUserScholarshipByProviderId } = require('../controllers/userScholarshipController')
 
 const uploadOrganizationLogo = require('../middlewares/multerOrganizationLogo')
 const uploadUserResume = require('../middlewares/multerUserResume')
@@ -34,11 +34,13 @@ router.use(authenticate)
 router.get('/scholarships/users', getUserScholarships)
 router.get('/scholarship/user/:uid?', getUserScholarshipByUserId)
 router.post('/create/scholarship', createScholarship)
+router.put('/update/scholarship/:sid', updateScholarship)
+router.get('/scholarships/provider/:pid', getUserScholarshipByProviderId)
 
 router.get('/users', getUsers)
 router.get('/user', getAuthenticatedUser)
 router.get('/user/detail/:uid', getUserById)
-router.put('/user/update/:uid', updateUserById)
+router.put('/update/resume/user', uploadUserResume, updateUserResume)
 router.put('/user/:uid/scholarship/:sid', changeUserScholarshipStatus)
 router.post('/create/user/scholarship/:sid', addUserScholarship)
 router.get('/user/scholarship/:sid', getUserScholarshipByScholarshipId)

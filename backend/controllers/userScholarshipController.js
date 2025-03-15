@@ -76,9 +76,17 @@ const getUserScholarshipByUserId = async (req, res, next) => {
             return scholarshipJSON
         })
 
+        const currUser = await User.findOne({
+            attributes: ['resume'],
+            where: {
+                id: uid
+            }
+        })
+
         res.status(200).json({
             message: "successfully fetch all scholarship applied by a user",
-            userScholarships: userScholarshipsJSON
+            userScholarships: userScholarshipsJSON,
+            resume: currUser?.resume ? encodeURI(`http://localhost:5000/uploads/${currUser.resume}`) : null
         })
     }catch(error){
         next(error)
@@ -160,4 +168,53 @@ const addUserScholarship = async (req, res, next) => {
     }
 }
 
-module.exports = { addUserScholarship, changeUserScholarshipStatus, getUserScholarshipByScholarshipId, getUserScholarshipByUserId, getUserScholarships }
+const getUserScholarshipByProviderId = async (req, res, next) => {
+    try {
+        const pid = +req.params.pid
+        const providerScholarships = await Scholarship.findAll({
+            attributes: ['id','title'],
+            include: [
+                {
+                    model: Location,
+                    attributes: ['name']
+                },
+                {
+                    model: UserScholarships,
+                    attributes: ['isaccepted'],
+                    include: [
+                        {
+                            model: User,
+                            attributes: ['id','name', 'resume']
+                        }
+                    ]
+                }
+            ],
+            where: {
+                providerid: pid
+            },
+        })
+        const resultJSON = providerScholarships.map(scholarship => {
+            const plainScholarship = scholarship.toJSON();
+            return {
+                id: plainScholarship.id,
+                title: plainScholarship.title,
+                location: plainScholarship.Location?.name,
+                users: plainScholarship.UserScholarships.map(userScholarship => ({
+                    id: userScholarship.User?.id,
+                    isaccepted: userScholarship.isaccepted,
+                    name: userScholarship.User?.name || null,
+                    resume: userScholarship.User?.resume ? encodeURI(`http://localhost:5000/uploads/${userScholarship.User?.resume}`) : null
+                }))
+            }
+        })
+
+        res.status(200).json({
+            message: "successfully get all applicant scholarships details",
+            scholarships: resultJSON
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+module.exports = { addUserScholarship, changeUserScholarshipStatus, getUserScholarshipByScholarshipId, getUserScholarshipByUserId, getUserScholarships, getUserScholarshipByProviderId }

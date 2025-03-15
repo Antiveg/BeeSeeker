@@ -200,41 +200,60 @@ const getScholarships = async (req, res, next) => {
     }
 }
 
-const getOwnScholarships = async (req, res, next) => {
+const updateScholarship = async (req, res, next) => {
     try {
-        const { id } = req.user
-
-        console.log(req.user)
-
-        if(!id){
-            res.status(401).json({
-                message: 'user are not authenticated'
-            })
-        }else{
-            const scholarships = await Scholarship.findAll({
-                attributes: {
-                    exclude: ['password']
-                },
-                where: {
-                    userid: id
-                }
-            })
-
-            scholarships.forEach((scholarship) => {
-                scholarship.updatedAt = formatDate(scholarship.updatedAt)
-                scholarship.createdAt = formatDate(scholarship.createdAt)
-                scholarship.deadline = formatDate(scholarship.deadline)
-            })
-
-            res.status(200).json({
-                message: "User authenticated!",
-                scholarships: scholarships
-            })
-        }
+        const sid = +req.params.sid
+        const isvisible = req.body.isvisible === "true" || req.body.isvisible === true
+        const count = await Scholarship.update({
+            isvisible: isvisible
+        }, {
+            where: {
+                id: sid
+            }
+        })
+        res.status(200).json({
+            message: "successfully updated scholarship data"
+        })
     }catch(error){
         next(error)
     }
 }
+
+// const getOwnScholarships = async (req, res, next) => {
+//     try {
+//         const { id } = req.user
+
+//         console.log(req.user)
+
+//         if(!id){
+//             res.status(401).json({
+//                 message: 'user are not authenticated'
+//             })
+//         }else{
+//             const scholarships = await Scholarship.findAll({
+//                 attributes: {
+//                     exclude: ['password']
+//                 },
+//                 where: {
+//                     userid: id
+//                 }
+//             })
+
+//             scholarships.forEach((scholarship) => {
+//                 scholarship.updatedAt = formatDate(scholarship.updatedAt)
+//                 scholarship.createdAt = formatDate(scholarship.createdAt)
+//                 scholarship.deadline = formatDate(scholarship.deadline)
+//             })
+
+//             res.status(200).json({
+//                 message: "User authenticated!",
+//                 scholarships: scholarships
+//             })
+//         }
+//     }catch(error){
+//         next(error)
+//     }
+// }
 
 const createScholarship = async (req, res, next) => {
     try {
@@ -243,7 +262,7 @@ const createScholarship = async (req, res, next) => {
             location, description, major
         } = req.body
 
-        const provider = await Provider.findOne({  // Add 'await' here
+        const provider = await Provider.findOne({ 
             attributes: ['id'],
             where: {
                 userid: +req.user.id
@@ -274,4 +293,4 @@ const createScholarship = async (req, res, next) => {
     }
 }
 
-module.exports = { getScholarshipById, getScholarships, createScholarship, getOwnScholarships }
+module.exports = { getScholarshipById, getScholarships, createScholarship, updateScholarship }

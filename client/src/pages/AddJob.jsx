@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'  
-import Quill from 'quill';  
-import { JobCategories, JobLocations } from '../assets/assets';  
-import { AppContext } from "../context/AppContext";  
+import { AppContext } from '../context/AppContext'
+import Quill from 'quill'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const AddJob = () => {  
+
+    const navigate = useNavigate()
+    const { refresh, setRefresh } = useContext(AppContext)
 
     const editorRef = useRef(null)  
     const quillRef = useRef(null)
@@ -41,6 +44,8 @@ const AddJob = () => {
                     'Content-Type': 'application/json',
                 }
             })
+            setRefresh(!refresh)
+            navigate('/dashboard/manage-job')
         }catch(error) {
             console.log("Error creating new scholarship...")
         }finally {
@@ -121,7 +126,7 @@ const AddJob = () => {
                     onChange={handleChange}  
                     value={formData.major}  
                     required>
-                    <option value="">Select a Major</option> {/* Default Placeholder */}
+                    <option value="">Select a Major</option>
                     {Majors.map((maj, index) => (
                         <option key={index} value={maj?.id}>{maj?.name}</option> 
                     ))}
