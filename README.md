@@ -28,13 +28,12 @@ BeeSeeker is built using modern web technologies to ensure a seamless experience
 - **Supporting Files:** VS Code configuration files, a `.gitignore` file, and an **ERD diagram** (`ERD.jpg`) for the database schema.
 
 ---
-
 ## Features
-- **User Registration & Authentication** – Secure sign-up/login using JSON Web Tokens.
-- **Dynamic Scholarship Forms** – Rich text inputs with Quill Editor.
-- **Responsive Design** – Clean, responsive UI powered by React, Vite, and Tailwind CSS.
-- **Robust Backend** – Secure data handling using PostgreSQL and Sequelize.
-- **Utility Integrations** – Date formatting with Moment.js, data conversion with K-convert, and API communication via Axios.
+- **Scholarship Search & Filtering** – Easily find scholarships by name and refine results based on location, category, education level, and more.
+- **User Authentication** – Secure login and signup with JSON Web Token (JWT) authentication.
+- **Scholarship Management** – Users can apply for scholarships, while providers can create and manage scholarship listings.
+- **Dynamic Scholarship Forms** – Intuitive form creation with a rich text editor for detailed scholarship descriptions.
+- **Responsive & Modern UI** – A seamless experience across devices, built with React, Vite, and Tailwind CSS.
 
 ---
 
